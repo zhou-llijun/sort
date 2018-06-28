@@ -4,16 +4,58 @@
 #define N ((1<<16)+1)
 
 int A[N];
+int med[N];
+
+/*
+A[foo], A[bar]をスワップする関数
+*/
+void swap(int A[], int foo, int bar){
+	int z = A[foo];
+	A[foo] = A[bar];
+	A[bar] = z;
+}
+
+/*
+長さnが5以下の配列Aのk+1番目に小さい値を返す関数
+ただし、Aの中身は書き換えてしまう。
+挿入ソートが適用
+*/
+int solve5(int A[], int n, int k){
+	int i, j, min, z;
+	for(i = 0; i < n; i++){
+		min = i;
+		for(j = i+1; j < n; j++){
+			if(A[j] < A[min]) min = j;			
+		}
+		swap(A, i, min);
+	}
+	return A[k];
+}
 
 /*
 A[0], A[1], ..., A[n-1] の中でk+1番目に小さい値を返す関数
 ただし、Aの中身は書き換えてしまう。
+中央値の中央値アルゴリズムが適用
 */
 int quick_select(int A[], int n, int k){
-  int i, j, pivot;
+	if(n <= 5) return solve5(A, n, k);
+	int block_A;				// block_A = 分割数
+	for(block_A = 0; 5*block_A <= n-1; block_A++){
+		int left;				// 分割していない部分の項数
+		left = n-5*block_A;
+		if(left >= 5) med[block_A] = solve5(A+5*block_A, 5, 2);
+		else med[block_A] = solve5(A+5*block_A, left, left/2);
+	}
 
-// 先頭の要素をピボットとする
-  pivot = A[0];
+	int pivot, i, j;
+	pivot = quick_select(med, block_A, block_A/2);
+	for(i=0; i<n; i++){			// pivotを探し出して先頭に置く
+		if(A[i] == pivot){
+			swap(A, i, 0);
+			break;
+		}
+	}
+
   for(i = j = 1; i < n; i++){
     if(A[i] <= pivot){
       int z = A[j];
