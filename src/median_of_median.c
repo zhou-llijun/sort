@@ -39,16 +39,15 @@ A[0], A[1], ..., A[n-1] の中でk+1番目に小さい値を返す関数
 */
 int quick_select(int A[], int n, int k){
 	if(n <= 5) return solve5(A, n, k);
-	int block_A;				// block_A = 分割数
-	for(block_A = 0; 5*block_A <= n-1; block_A++){
-		int left;				// 分割していない部分の項数
-		left = n-5*block_A;
-		if(left >= 5) med[block_A] = solve5(A+5*block_A, 5, 2);
-		else med[block_A] = solve5(A+5*block_A, left, left/2);
+	int block;				// 分割数
+	int left;				// 分割していない部分の項数
+	for(block = 0; (left = n-5*block) > 0; block++){
+		if(left >= 5) med[block] = solve5(A+5*block, 5, 2);
+		else med[block] = solve5(A+5*block, left, left/2);
 	}
 
 	int pivot, i, j;
-	pivot = quick_select(med, block_A, block_A/2);
+	pivot = quick_select(med, block, block/2);
 	for(i=0; i<n; i++){			// pivotを探し出して先頭に置く
 		if(A[i] == pivot){
 			swap(A, i, 0);
