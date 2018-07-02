@@ -29,7 +29,7 @@ int quick_select(int A[], int n, int k){
 	r = n;	// pivot列の後にくる１つ目の他の要素のインデックス
 	for(i = 1; i < r; i++){
 		if(A[i] < pivot) swap(A, i, l++);
-		if(A[i] > pivot) swap(A, i--, --r);
+		else if(A[i] > pivot) swap(A, i--, --r);
 	}
 	if(l <= k && k < r) return pivot;
 	else if(k >= r) return quick_select(A+r, n-r, k-r);

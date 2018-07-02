@@ -25,7 +25,7 @@ void quick_sort(int A[], int n){
 	r = n;	// pivot列の後にくる１つ目の他の要素のインデックス
 	for(i = 1; i < r; i++){
 		if(A[i] < pivot) swap(A, i, l++);
-		if(A[i] > pivot) swap(A, i--, --r);
+		else if(A[i] > pivot) swap(A, i--, --r);
 	}
 	quick_sort(A, l);
 	quick_sort(A+r, n-r);
